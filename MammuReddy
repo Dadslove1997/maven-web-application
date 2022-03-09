@@ -10,7 +10,7 @@ sh "${mavenHome}/bin/mvn clean package"
 /*stage('ExecuteSQ'){
 sh "${mavenHome}/bin/mvn sonar:sonar"  
 }
-stage("UploadArtfactRepo"){
+stage("uploadArtfactRepo"){
 sh "${mavenHome}/bin/mvn deploy"  
 }*/
 stage('DeployTomcatSever'){
