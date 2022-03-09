@@ -1,0 +1,21 @@
+node{
+properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '5', numToKeepStr: '5')), pipelineTriggers([pollSCM('* * * * *')])])
+def mavenHome = tool name: "maven3.8.4"
+stage('CheckoutCode'){
+git credentialsId: 'e9fc1b14-21cd-4b0e-8e0f-5fd5ab94a05c', url: 'https://github.com/Dadslove1997/maven-web-application.git'
+}
+stage('Build'){
+sh "${mavenHome}/bin/mvn clean package"  
+}
+/*stage('ExecuteSQ'){
+sh "${mavenHome}/bin/mvn sonar:sonar"  
+}
+stage("UploadArtfactRepo"){
+sh "${mavenHome}/bin/mvn deploy"  
+}*/
+stage('DeployTomcatSever'){
+sshagent(['f1d403e3-b658-4472-8a20-99b179533ff2']) {
+sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@3.111.169.106:/opt/apache-tomcat-9.0.59/webapps/"    
+} 
+}
+}
